@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+heqi_group_epc_params, heqi_group_epc_params,model_epc_params,epc_product_manager,1,1,1,0
+heqi_group_epc_product, heqi_group_epc_product,model_epc_product,epc_product_manager,1,1,1,0
+heqi_group_goods_class, heqi_group_goods_class,model_goods_class,epc_product_manager,1,1,1,0
+heqi_group_epc_line_product, heqi_group_epc_line_product,model_epc_line_product,epc_product_manager,1,1,1,0
+

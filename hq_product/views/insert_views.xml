@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+        <record id="epc_wizard_form" model="ir.ui.view">
+        <field name="name">epc.wizard.form</field>
+        <field name="model">epc.wizard</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <form string="产品导入添加向导" col="4">
+                <sheet>
+                    <group colspan="4" col="6">
+                        <field name="part_category" string="产品类型" required="True" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="part_brand" string="产品品牌" required="True"
+                               options="{'no_create': True, 'no_open': True}"
+                               domain="[('category_id', '=', part_category)]"
+                               attrs="{'required': [('part_category', '!=', False)]}"/>
+                        <field name="epc_category_id" invisible="1"/>
+                        <field name="part_brand_id" invisible="1"/>
+                        <field name="level" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="产品选择">
+                            <field name="name_ids">
+                                <tree create="false" editable="false" delete="false" options="{'no_create': True, 'no_open':True}">
+                                    <field name="part_name" string="配件名称" readonly="1"/>
+                                    <field name="part_model" string="规格型号" readonly="1"/>
+                                    <field name="pmanu_code" string="出厂编码" readonly="1"/>
+                                    <field name="psn" string="系统编码" readonly="1"/>
+                                    <field name="part_Name_id" readonly="1" invisible="1"/>
+                                    <field name="series" string="等级、系列" readonly="1"/>
+                                    <field name="is_on_check"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                        <button type="special" special="cancel" string="取消" class="btn-default"/>
+                        <button type="object" string="查询产品" name="button_search_part" />
+                        <button type="object" string="确认导入" name="button_insert" attrs="{'invisible': [('level', '!=', 'three')]}"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="epc_product_tree" model="ir.ui.view">
+        <field name="name">epc.product.tree</field>
+        <field name="model">epc.product</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="epc产品导入">
+                <field name="part_category"/>
+                <field name="part_brand"/>
+                <field name="create_date" string="创建时间"/>
+                <field name="create_uid" string="创建人"/>
+            </tree>
+        </field>
+    </record>
+    <record id="epc_product_form" model="ir.ui.view">
+        <field name="name">epc.product.form</field>
+        <field name="model">epc.product</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="产品" edit="false" create="false">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="part_category" readonly="1"/>
+                        <field name="part_brand" readonly="1"/>
+                        <field name="create_date" string="创建时间" readonly="1"/>
+                        <field name="create_uid" string="创建人" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="产品选择" >
+                            <field name="insert_line">
+                                <tree create="false" editable="false" delete="false" options="{'no_create': True, 'no_open':True}">
+                                    <field name="part_name" string="配件名称" readonly="1"/>
+                                    <field name="epc_category_id" string="分类ID" readonly="1"/>
+                                    <field name="code" string="品牌编码" readonly="1"/>
+                                    <field name="brand_manu_name" string="品牌名称" readonly="1"/>
+                                    <field name="part_model" string="规格型号" readonly="1"/>
+                                    <field name="epc_pn" string="配件编码" readonly="1"/>
+                                    <field name="psn" string="系统编码" readonly="1"/>
+                                    <field name="category_name" string="直属分类名称" readonly="1"/>
+                                    <field name="series" string="等级、系列" readonly="1"/>
+                                    <field name="pmanu_name" string="生产厂商" readonly="1"/>
+                                    <field name="pmanu_code" string="出厂编码" readonly="1"/>
+                                    <field name="pmanu_addr" string="产地" readonly="1"/>
+                                    <field name="part_Name_id" readonly="1" invisible="1"/>
+                                    <field name="is_exist" readonly="1" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="act_product_request_view">
+        <field name="name">EPC产品查询导入</field>
+        <field name="res_model">epc.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form,tree</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_product_load_view">
+        <field name="name">产品导入记录</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">epc.product</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+
+    <!--根菜单-->
+    <menuitem id='product_menu' name='产品' web_icon="sell,static/description/icon.png"/>
+    <!-- 产品主数据 -->
+    <menuitem id='product_menu_master' name='主数据' parent='product_menu' sequence="1"/>
+
+    <menuitem id='sell_goods_menu'
+              name='商品'
+              parent='product_menu_master'
+              action='sell.goods_action_sell'
+              sequence='10' />
+
+    <menuitem id="menu_goods_class"
+              name="商品分类"
+              parent="product_menu_master"
+              action="goods.goods_class_action"
+              sequence="20" />
+
+    <menuitem id="menu_hq_epc_product"
+              parent="product_menu_master"
+              name="产品导入记录"
+              sequence="40"
+              action="act_product_load_view"/>
+
+    <menuitem id="menu_hq_epc_product_request"
+              parent="product_menu_master"
+              name="EPC产品查询导入"
+              sequence="50"
+              action="act_product_request_view"/>
+</odoo>

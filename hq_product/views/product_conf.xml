@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="epc_conf_form" model="ir.ui.view">
+        <field name="name">epc.conf.form</field>
+        <field name="model">product.config.settings</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="请求参数设置" edit="true" create="true">
+                <header>
+                        <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                        <button string="Cancel" type="object" name="cancel" class="oe_link" special="cancel"/>
+                </header>
+                <sheet>
+                    <group string="EPC 授权信息">
+                        <div>
+                            <a target="_blank">请发送邮件到developers@heqiauto.com 获取授权账号</a>
+                        </div>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name="client_id" string="客户端ID"/>
+                        <field name="secret_key" string="密钥"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="act_product_conf_view" model="ir.actions.act_window">
+        <field name="name">EPC参数设置</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+
+    <menuitem id="menu_hq_epc_product_conf"
+              parent="product_menu_master"
+              name="EPC参数设置"
+              sequence="60"
+              action="act_product_conf_view"/>
+</odoo>
